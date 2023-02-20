@@ -5,19 +5,22 @@ import reqsnaked
 
 
 async def main():
-    client = reqsnaked.aio.client.AsyncClient(
+    client = reqsnaked.AsyncClient(
         user_agent="Reqsnaked/1.0",
         headers={"X-Foo": "bar"}
     )
     response = await client.request(
-        reqsnaked.aio.request.AsyncRequest(
-            reqsnaked.primitives.HTTPMethod.from_str("GET"),
-            reqsnaked.primitives.URL.from_str("https://httpbin.org/headers")
+        reqsnaked.Request(
+            "POST",
+            "https://httpbin.org/anything",
+            query={"foo": "bar"},
+            timeout=datetime.timedelta(seconds=30),
+            basic_auth=reqsnaked.BasicAuth("John", "D0eeee")
         )
     )
     print(response.status.code)
     data = await response.json()
-    print(data.select("headers"))
+    print(data.select())
 
 
 asyncio.run(main())

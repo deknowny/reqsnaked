@@ -11,7 +11,6 @@ crate-type = ["cdylib"]
 [dependencies]
 futures = "0.3.26"
 http = "0.2.9"
-hyper = { path = "vendor/hyper", features = ["client", "tcp", "http1", "http2"] }
 pyo3 = { version = "0.16.3", features = ["extension-module"] }
 pyo3-asyncio = { version = "0.16.0", features = ["tokio-runtime"] }
 reqwest = { version = "0.11.14", features = ["tokio-rustls", "trust-dns", "trust-dns-resolver", "socks", "serde_json", "rustls", "json", "hyper-rustls", "async-compression", "cookies", "brotli", "gzip", "blocking"] }

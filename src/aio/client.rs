@@ -1,23 +1,20 @@
 use pyo3::prelude::*;
 
 use crate::aio::response::AsyncResponse;
-use crate::aio::request::AsyncRequest;
-
+use crate::request::Request;
 
 #[pyclass]
 pub struct AsyncClient {
     client: reqwest::Client,
 }
 
-
 impl AsyncClient {
     pub fn py_awaitable_request<'rt>(
         &self,
         client: reqwest::Client,
         request: reqwest::Request,
-        py: Python<'rt>
-    )
-    -> PyResult<&'rt PyAny> {
+        py: Python<'rt>,
+    ) -> PyResult<&'rt PyAny> {
         pyo3_asyncio::tokio::future_into_py(py, async move {
             let response = client.execute(request).await.unwrap();
             Ok(AsyncResponse {
@@ -33,7 +30,8 @@ impl AsyncClient {
     #[new]
     pub fn new(
         user_agent: Option<String>,
-        headers: Option<std::collections::HashMap<String, String>>
+        headers: Option<std::collections::HashMap<String, String>>,
+        store_cookie: Option<bool>,
     ) -> Self {
         let mut client = reqwest::Client::builder();
         if let Some(ref user_agent) = user_agent {
@@ -42,13 +40,16 @@ impl AsyncClient {
         let mut default_headers_map = reqwest::header::HeaderMap::new();
         if let Some(default_headers) = headers {
             for (key, value) in default_headers {
-            // TODO: headers wrapper
+                // TODO: headers wrapper
                 default_headers_map.insert(
                     reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
-                    reqwest::header::HeaderValue::from_str(&value).unwrap()
+                    reqwest::header::HeaderValue::from_str(&value).unwrap(),
                 );
             }
             client = client.default_headers(default_headers_map);
+        }
+        if let Some(store_cookie) = store_cookie {
+            client = client.cookie_store(store_cookie);
         }
 
         AsyncClient {
@@ -56,21 +57,17 @@ impl AsyncClient {
         }
     }
 
-    pub fn request<'rt>(
-        &self,
-        request: &PyCell<AsyncRequest>,
-        py: Python<'rt>
-    ) -> PyResult<&'rt PyAny> {
+    pub fn request<'rt>(&self, request: &PyCell<Request>, py: Python<'rt>) -> PyResult<&'rt PyAny> {
         let client = self.client.clone();
-        let request = request.borrow().build(&client);
+        let request = request.borrow().build(&client)?;
         self.py_awaitable_request(client, request, py)
     }
 }
 
-
-pub fn init_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> PyResult<()> {
     let submod = PyModule::new(py, "client")?;
     submod.add_class::<AsyncClient>()?;
+    library.add_class::<AsyncClient>()?;
     parent_module.add_submodule(submod)?;
     Ok(())
 }

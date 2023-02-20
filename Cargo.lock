@@ -433,28 +433,6 @@ checksum = "c4a1e36c821dbe04574f602848a19f742f4fb3c98d40449f11bcad18d6b17421"
 [[package]]
 name = "hyper"
 version = "0.14.24"
-dependencies = [
- "bytes",
- "futures-channel",
- "futures-core",
- "futures-util",
- "h2",
- "http",
- "http-body",
- "httparse",
- "httpdate",
- "itoa",
- "pin-project-lite",
- "socket2",
- "tokio",
- "tower-service",
- "tracing",
- "want",
-]
-
-[[package]]
-name = "hyper"
-version = "0.14.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e011372fa0b68db8350aa7a248930ecc7839bf46d8485577d69f117a75f164c"
 dependencies = [
@@ -483,7 +461,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1788965e61b367cd03a62950836d5cd41560c3577d90e40e0819373194d1661c"
 dependencies = [
  "http",
- "hyper 0.14.24 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper",
  "rustls",
  "tokio",
  "tokio-rustls",
@@ -496,7 +474,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6183ddfa99b85da61a140bea0efc93fdf56ceaa041b37d553518030827f9905"
 dependencies = [
  "bytes",
- "hyper 0.14.24 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper",
  "native-tls",
  "tokio",
  "tokio-native-tls",
@@ -970,7 +948,6 @@ version = "0.1.0"
 dependencies = [
  "futures",
  "http",
- "hyper 0.14.24",
  "pyo3",
  "pyo3-asyncio",
  "reqwest",
@@ -996,7 +973,7 @@ dependencies = [
  "h2",
  "http",
  "http-body",
- "hyper 0.14.24 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper",
  "hyper-rustls",
  "hyper-tls",
  "ipnet",
