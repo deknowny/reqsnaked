@@ -1,7 +1,5 @@
 import asyncio
 import datetime
-import urllib.parse
-import http
 
 import reqsnaked
 
@@ -14,15 +12,16 @@ async def main():
     response = await client.send(
         reqsnaked.Request(
             "POST",
-            urllib.parse.urlparse("https://httpbin.org/anything"),
+            "https://httpbin.org/anything",
             multipart=reqsnaked.Multipart(
                 reqsnaked.Part("foo", b"01010101", filename="foo.txt", mime="text/plain")
             ),
+            query={"foo": "bar"},
+            headers={"X-Bar": "foo"},
             timeout=datetime.timedelta(seconds=30),
         )
     )
-    print(response.status.description)
-    print(response.version)
+    print(response.status)
     data = await response.json()
     print(data.select())
 
