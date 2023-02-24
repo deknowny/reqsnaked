@@ -44,7 +44,7 @@ The library is in developing stage and these features are coming soon.
 - [X] Multipart requests
 - [X] Raw body reader
 - [X] Chunks body reader
-- [ ] Cast `urllib.parse.ParseResult` for request building
+- [X] Cast `urllib.parse.ParseResult` for request building
 - [X] Cast `http` enums for request building
 - [ ] Rust TLS/OpenSSL selection
 - [ ] Proxy policy (random and cycled)
