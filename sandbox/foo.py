@@ -1,7 +1,7 @@
 import asyncio
+import datetime
 
 import reqsnaked
-
 
 
 async def main():
@@ -11,16 +11,15 @@ async def main():
     )
     response = await client.request(
         reqsnaked.Request(
-            "POST",
-            "https://httpbin.org/anything",
-            query={"foo": "bar"},
+            "GET",
+            "https://httpbin.org/image/jpeg",
             timeout=datetime.timedelta(seconds=30),
-            basic_auth=reqsnaked.BasicAuth("John", "D0eeee")
         )
     )
     print(response.status.code)
-    data = await response.json()
-    print(data.select())
+    stream = response.to_stream()
+    while chunk := await stream.gnaw():
+        print(chunk)
 
 
 asyncio.run(main())

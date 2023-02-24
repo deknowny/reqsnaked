@@ -61,10 +61,7 @@ pub struct BasicAuth {
 #[pymethods]
 impl BasicAuth {
     #[new]
-    pub fn new(
-        username: String,
-        password: Option<String>,
-    ) -> BasicAuth {
+    pub fn new(username: String, password: Option<String>) -> BasicAuth {
         BasicAuth { username, password }
     }
 }

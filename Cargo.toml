@@ -9,6 +9,7 @@ name = "reqsnaked"
 crate-type = ["cdylib"]
 
 [dependencies]
+bytes = "1.4.0"
 futures = "0.3.26"
 http = "0.2.9"
 pyo3 = { version = "0.16.3", features = ["extension-module"] }
@@ -16,4 +17,5 @@ pyo3-asyncio = { version = "0.16.0", features = ["tokio-runtime"] }
 reqwest = { version = "0.11.14", features = ["tokio-rustls", "trust-dns", "trust-dns-resolver", "socks", "serde_json", "rustls", "json", "hyper-rustls", "async-compression", "cookies", "brotli", "gzip", "blocking"] }
 serde = "1.0.152"
 serde_json = "1.0.93"
+tokio = "1.25.0"
 url = "2.3.1"

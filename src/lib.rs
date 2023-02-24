@@ -5,6 +5,7 @@ pub mod json;
 pub mod primitives;
 pub mod py2rs;
 pub mod request;
+pub mod rs2py;
 
 #[pymodule]
 fn reqsnaked(py: Python, module: &PyModule) -> PyResult<()> {

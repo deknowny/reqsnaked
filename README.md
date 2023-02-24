@@ -4,6 +4,7 @@ Reqsnaked is hand-written bindings for Rust's reqwests library providing feature
 ## Overview
 ```python
 import asyncio
+import datetime
 
 import reqsnaked
 
@@ -41,8 +42,8 @@ The library is in developing stage and these features are coming soon.
 - [ ] Redirect policies in client
 - [ ] Form requests
 - [ ] Multipart requests
-- [ ] Raw body reader
-- [ ] Chunks body reader
+- [X] Raw body reader
+- [X] Chunks body reader
 - [ ] Cast `urllib.parse.ParseResult` for request building
 - [ ] Cast `http` enums for request building
 - [ ] Rust TLS/OpenSSL selection
