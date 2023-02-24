@@ -32,6 +32,7 @@ impl AsyncClient {
         user_agent: Option<String>,
         headers: Option<std::collections::HashMap<String, String>>,
         store_cookie: Option<bool>,
+        max_allowed_redirects: Option<usize>,
     ) -> Self {
         let mut client = reqwest::Client::builder();
         if let Some(ref user_agent) = user_agent {
@@ -50,6 +51,11 @@ impl AsyncClient {
         }
         if let Some(store_cookie) = store_cookie {
             client = client.cookie_store(store_cookie);
+        }
+        if let Some(max_allowed_redirects) = max_allowed_redirects {
+            client = client.redirect(
+                reqwest::redirect::Policy::limited(max_allowed_redirects)
+            )
         }
 
         AsyncClient {

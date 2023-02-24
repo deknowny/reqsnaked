@@ -39,8 +39,8 @@ asyncio.run(main())
 
 # Features list
 The library is in developing stage and these features are coming soon.
-- [ ] Redirect policies in client
-- [ ] Form requests
+- [X] Redirect policies in client
+- [X] Form requests
 - [ ] Multipart requests
 - [X] Raw body reader
 - [X] Chunks body reader

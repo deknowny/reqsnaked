@@ -11,15 +11,15 @@ async def main():
     )
     response = await client.request(
         reqsnaked.Request(
-            "GET",
-            "https://httpbin.org/image/jpeg",
+            "POST",
+            "https://httpbin.org/anything",
+            form={"foo": "bar"},
             timeout=datetime.timedelta(seconds=30),
         )
     )
     print(response.status.code)
-    stream = response.to_stream()
-    while chunk := await stream.gnaw():
-        print(chunk)
+    data = await response.json()
+    print(data.select())
 
 
 asyncio.run(main())

@@ -32,20 +32,6 @@ pub struct AsyncResponse {
     pub status: reqwest::StatusCode,
 }
 
-impl AsyncResponse {
-    pub async fn read_body_chunk(&mut self) -> PyResult<Option<rs2py::bytes::Bytes>> {
-        // TODO
-        Ok(None)
-        // let mut borrowed = self.response.borrow_mut();
-        // if let Some(mut response) = borrowed.take() {
-        //     return Ok(
-        //         response.chunk().await.unwrap().and_then(
-        //             |bytes| Some(rs2py::bytes::Bytes(bytes))
-        //         )
-        //     );
-        // }
-    }
-}
 
 #[pymethods]
 impl AsyncResponse {
@@ -96,6 +82,8 @@ pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> 
     let submod = PyModule::new(py, "response")?;
     submod.add_class::<AsyncResponse>()?;
     library.add_class::<AsyncResponse>()?;
+    submod.add_class::<AsyncStream>()?;
+    library.add_class::<AsyncStream>()?;
     parent_module.add_submodule(submod)?;
     Ok(())
 }

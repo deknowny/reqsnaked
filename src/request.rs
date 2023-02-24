@@ -11,6 +11,7 @@ pub struct Request {
     pub url: primitives::URL,
     pub headers: Option<std::collections::HashMap<String, String>>,
     pub query: Option<std::collections::HashMap<String, String>>,
+    pub form: Option<std::collections::HashMap<String, String>>,
     pub bearer_auth: Option<String>,
     pub body: Option<Vec<u8>>,
     pub timeout: Option<std::time::Duration>,
@@ -27,6 +28,9 @@ impl Request {
         }
         if let Some(ref query) = self.query {
             request = request.query(query);
+        }
+        if let Some(ref form) = self.form {
+            request = request.form(form);
         }
         if let Some(ref bearer_auth) = self.bearer_auth {
             request = request.bearer_auth(bearer_auth);
@@ -54,6 +58,7 @@ impl Request {
         url: primitives::URL,
         headers: Option<std::collections::HashMap<String, String>>,
         query: Option<std::collections::HashMap<String, String>>,
+        form: Option<std::collections::HashMap<String, String>>,
         bearer_auth: Option<String>,
         body: Option<Vec<u8>>,
         timeout: Option<PyDurationAnalog>,
@@ -64,6 +69,7 @@ impl Request {
             url,
             headers,
             query,
+            form,
             bearer_auth,
             body,
             basic_auth,
