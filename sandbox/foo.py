@@ -13,7 +13,7 @@ async def main():
         reqsnaked.Request(
             "POST",
             "https://httpbin.org/anything",
-            form={"foo": "bar"},
+            multipart=reqsnaked.AsyncMultipart().text("foo", "bar"),
             timeout=datetime.timedelta(seconds=30),
         )
     )

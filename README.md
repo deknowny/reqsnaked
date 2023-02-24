@@ -41,7 +41,7 @@ asyncio.run(main())
 The library is in developing stage and these features are coming soon.
 - [X] Redirect policies in client
 - [X] Form requests
-- [ ] Multipart requests
+- [X] Multipart requests
 - [X] Raw body reader
 - [X] Chunks body reader
 - [ ] Cast `urllib.parse.ParseResult` for request building
@@ -51,3 +51,4 @@ The library is in developing stage and these features are coming soon.
 - [ ] Rate limiter
 - [ ] Own exceptions
 - [ ] Pyi stubs
+

@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 use crate::{
     primitives::{self, BasicAuth},
-    py2rs::{base::ToNative, duration::PyDurationAnalog},
+    py2rs::{base::ToNative, duration::PyDurationAnalog}, aio::multipart::{form::AsyncMultipart, self},
 };
 
 #[pyclass]
@@ -16,6 +16,7 @@ pub struct Request {
     pub body: Option<Vec<u8>>,
     pub timeout: Option<std::time::Duration>,
     pub basic_auth: Option<BasicAuth>,
+    pub multipart: Option<std::cell::RefCell<Option<reqwest::multipart::Form>>>
 }
 
 impl Request {
@@ -44,6 +45,9 @@ impl Request {
         if let Some(ref basic_auth) = self.basic_auth {
             request = request.basic_auth(basic_auth.username.clone(), basic_auth.password.clone());
         }
+        if let Some(ref multipart) = self.multipart {
+            request = request.multipart(multipart.borrow_mut().take().unwrap());
+        }
 
         Ok(request.build().unwrap())
     }
@@ -63,6 +67,7 @@ impl Request {
         body: Option<Vec<u8>>,
         timeout: Option<PyDurationAnalog>,
         basic_auth: Option<BasicAuth>,
+        multipart: Option<&PyCell<AsyncMultipart>>
     ) -> PyResult<Self> {
         Ok(Request {
             method,
@@ -73,6 +78,13 @@ impl Request {
             bearer_auth,
             body,
             basic_auth,
+            multipart: {
+                multipart.and_then(
+                    |inner| Some(
+                        std::cell::RefCell::new(Some(inner.borrow_mut().0.borrow_mut().take().unwrap()))
+                    )
+                )
+            },
             timeout: {
                 if let Some(inner) = timeout {
                     match inner.to_native() {
