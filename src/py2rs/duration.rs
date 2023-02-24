@@ -10,9 +10,9 @@ pub enum PyDurationAnalog<'a> {
 }
 
 impl ToNative for PyDurationAnalog<'_> {
-    type Native = PyResult<std::time::Duration>;
+    type Native = std::time::Duration;
 
-    fn to_native(&self) -> Self::Native {
+    fn to_native(&self) -> PyResult<Self::Native> {
         match self {
             Self::TimeDelta(value) => {
                 let total_seconds: u64 = value.call_method0("total_seconds")?.extract()?;

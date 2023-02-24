@@ -1,14 +1,15 @@
 use pyo3::prelude::*;
 
+use crate::aio::request::Request;
 use crate::aio::response::AsyncResponse;
-use crate::request::Request;
+use crate::exceptions::wrap_reqwest_error;
 
 #[pyclass]
-pub struct AsyncClient {
+pub struct Client {
     client: reqwest::Client,
 }
 
-impl AsyncClient {
+impl Client {
     pub fn py_awaitable_request<'rt>(
         &self,
         client: reqwest::Client,
@@ -16,9 +17,10 @@ impl AsyncClient {
         py: Python<'rt>,
     ) -> PyResult<&'rt PyAny> {
         pyo3_asyncio::tokio::future_into_py(py, async move {
-            let response = client.execute(request).await.unwrap();
+            let response = client.execute(request).await.map_err(wrap_reqwest_error)?;
             Ok(AsyncResponse {
                 status: response.status(),
+                version: response.version(),
                 response: std::cell::RefCell::new(Some(response)),
             })
         })
@@ -26,14 +28,14 @@ impl AsyncClient {
 }
 
 #[pymethods]
-impl AsyncClient {
+impl Client {
     #[new]
     pub fn new(
         user_agent: Option<String>,
         headers: Option<std::collections::HashMap<String, String>>,
         store_cookie: Option<bool>,
         max_allowed_redirects: Option<usize>,
-    ) -> Self {
+    ) -> PyResult<Self> {
         let mut client = reqwest::Client::builder();
         if let Some(ref user_agent) = user_agent {
             client = client.user_agent(user_agent);
@@ -53,17 +55,16 @@ impl AsyncClient {
             client = client.cookie_store(store_cookie);
         }
         if let Some(max_allowed_redirects) = max_allowed_redirects {
-            client = client.redirect(
-                reqwest::redirect::Policy::limited(max_allowed_redirects)
-            )
+            client = client.redirect(reqwest::redirect::Policy::limited(max_allowed_redirects))
         }
 
-        AsyncClient {
-            client: client.build().unwrap(),
+        match client.build() {
+            Err(err) => Err(wrap_reqwest_error(err)),
+            Ok(client) => Ok(Client { client }),
         }
     }
 
-    pub fn request<'rt>(&self, request: &PyCell<Request>, py: Python<'rt>) -> PyResult<&'rt PyAny> {
+    pub fn send<'rt>(&self, request: &PyCell<Request>, py: Python<'rt>) -> PyResult<&'rt PyAny> {
         let client = self.client.clone();
         let request = request.borrow().build(&client)?;
         self.py_awaitable_request(client, request, py)
@@ -72,8 +73,8 @@ impl AsyncClient {
 
 pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> PyResult<()> {
     let submod = PyModule::new(py, "client")?;
-    submod.add_class::<AsyncClient>()?;
-    library.add_class::<AsyncClient>()?;
+    submod.add_class::<Client>()?;
+    library.add_class::<Client>()?;
     parent_module.add_submodule(submod)?;
     Ok(())
 }

@@ -45,10 +45,9 @@ The library is in developing stage and these features are coming soon.
 - [X] Raw body reader
 - [X] Chunks body reader
 - [ ] Cast `urllib.parse.ParseResult` for request building
-- [ ] Cast `http` enums for request building
+- [X] Cast `http` enums for request building
 - [ ] Rust TLS/OpenSSL selection
 - [ ] Proxy policy (random and cycled)
 - [ ] Rate limiter
-- [ ] Own exceptions
+- [X] Own exceptions
 - [ ] Pyi stubs
-

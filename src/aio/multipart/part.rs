@@ -1,61 +1,47 @@
-use pyo3::{prelude::*, types::PyType};
+use pyo3::prelude::*;
+
+use crate::exceptions::MIMEParseError;
 
 #[pyclass]
-pub struct Part(
-    pub std::cell::RefCell<Option<reqwest::multipart::Part>>
-);
+pub struct Part {
+    pub name: String,
+    pub inner: std::cell::RefCell<Option<reqwest::multipart::Part>>,
+}
 
+#[derive(Debug, FromPyObject)]
+pub enum PartData {
+    Text(String),
+    Bytes(Vec<u8>),
+}
 
 #[pymethods]
 impl Part {
-    #[classmethod]
+    #[new]
     pub fn text(
-        _cls: &PyType,
-        value: String
-    ) -> Part {
+        name: String,
+        value: PartData,
+        filename: Option<String>,
+        mime: Option<&str>,
+    ) -> PyResult<Part> {
         // TODO
-        let new_part = reqwest::multipart::Part::text(value);
-        Part(
-            std::cell::RefCell::new(Some(new_part))
-        )
+        let mut inner = match value {
+            PartData::Text(content) => reqwest::multipart::Part::text(content),
+            PartData::Bytes(content) => reqwest::multipart::Part::bytes(content),
+        };
+        if let Some(filename) = filename {
+            inner = inner.file_name(filename);
+        }
+        if let Some(mime) = mime {
+            inner = inner
+                .mime_str(mime)
+                .map_err(|e| MIMEParseError::new_err(format!("Cannot parse MIME type: {:?}", e)))?;
+        }
+        Ok(Part {
+            name,
+            inner: std::cell::RefCell::new(Some(inner)),
+        })
     }
-
-    #[classmethod]
-    pub fn bytes(
-        _cls: &PyType,
-        value: Vec<u8>
-    ) -> Part {
-        // TODO
-        let new_part = reqwest::multipart::Part::bytes(value);
-        Part(
-            std::cell::RefCell::new(Some(new_part))
-        )
-    }
-
-    pub fn set_filename<'rt>(
-        slf: PyRefMut<'rt, Self>,
-        filename: String,
-    ) -> PyRefMut<'rt, Self> {
-        // TODO
-        let part = slf.0.borrow_mut().take().unwrap();
-        let new_part = part.file_name(filename);
-        slf.0.replace(Some(new_part));
-        slf
-    }
-
-    pub fn set_mime<'rt>(
-        slf: PyRefMut<'rt, Self>,
-        mime: &str,
-    ) -> PyResult<PyRefMut<'rt, Self>> {
-        // TODO
-        let part = slf.0.borrow_mut().take().unwrap();
-        let new_part = part.mime_str(mime).unwrap();
-        slf.0.replace(Some(new_part));
-        Ok(slf)
-    }
-
 }
-
 
 pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> PyResult<()> {
     let submod = PyModule::new(py, "part")?;

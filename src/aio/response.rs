@@ -1,7 +1,8 @@
 use pyo3::prelude::*;
 
+use crate::exceptions::{wrap_reqwest_error, BorrowingError, RACE_CONDITION_ERROR_MSG};
 use crate::json::{LazyJSON, PySerde};
-use crate::{primitives, rs2py};
+use crate::rs2py;
 use pyo3::exceptions::PyRuntimeError;
 
 #[pyclass]
@@ -15,13 +16,13 @@ impl AsyncStream {
         let response = slf.response.clone();
         pyo3_asyncio::tokio::future_into_py(py, async move {
             // TODO:
-            Ok(response
+            let chunk = response
                 .lock()
                 .await
                 .chunk()
                 .await
-                .unwrap()
-                .and_then(|bytes| Some(rs2py::bytes::Bytes(bytes))))
+                .map_err(wrap_reqwest_error)?;
+            Ok(chunk.and_then(|bytes| Some(rs2py::bytes::Bytes(bytes))))
         })
     }
 }
@@ -30,51 +31,56 @@ impl AsyncStream {
 pub struct AsyncResponse {
     pub response: std::cell::RefCell<Option<reqwest::Response>>,
     pub status: reqwest::StatusCode,
+    pub version: reqwest::Version,
 }
-
 
 #[pymethods]
 impl AsyncResponse {
     #[getter]
-    pub fn status(&self) -> primitives::StatusCode {
-        primitives::StatusCode(self.status)
+    pub fn status<'rt>(&'rt self, py: Python<'rt>) -> PyResult<&'rt PyAny> {
+        let http_module = py.import("http")?;
+        let http_enum = http_module.getattr("HTTPStatus")?;
+        http_enum.call1((self.status.as_u16(),))
+    }
+
+    #[getter]
+    pub fn version(&self) -> rs2py::http_version::HTTPVersion {
+        rs2py::http_version::HTTPVersion::from(self.version)
     }
 
     pub fn json<'rt>(&self, py: Python<'rt>) -> PyResult<&'rt PyAny> {
-        if let Some(response) = self.response.borrow_mut().take() {
-            return pyo3_asyncio::tokio::future_into_py(py, async move {
-                // TODO:
-                let parsed_body: PySerde = response.json().await.unwrap();
-                Ok(LazyJSON(parsed_body))
-            });
+        match self.response.borrow_mut().take() {
+            Some(response) => pyo3_asyncio::tokio::future_into_py(py, async move {
+                match response.json::<PySerde>().await {
+                    Ok(body) => Ok(LazyJSON(body)),
+                    Err(err) => Err(wrap_reqwest_error(err)),
+                }
+            }),
+            None => Err(BorrowingError::new_err(RACE_CONDITION_ERROR_MSG)),
         }
-        Err(PyRuntimeError::new_err(
-            "Response body has been already read",
-        ))
     }
 
     pub fn read<'rt>(&'rt self, py: Python<'rt>) -> PyResult<&'rt pyo3::PyAny> {
-        if let Some(response) = self.response.borrow_mut().take() {
-            return pyo3_asyncio::tokio::future_into_py(py, async move {
-                // TODO:
-                let parsed_body: PySerde = response.json().await.unwrap();
-                Ok(LazyJSON(parsed_body))
-            });
+        match self.response.borrow_mut().take() {
+            Some(response) => pyo3_asyncio::tokio::future_into_py(py, async move {
+                match response.bytes().await {
+                    Ok(body) => Ok(rs2py::bytes::Bytes(body)),
+                    Err(err) => Err(wrap_reqwest_error(err)),
+                }
+            }),
+            None => Err(BorrowingError::new_err(RACE_CONDITION_ERROR_MSG)),
         }
-        Err(PyRuntimeError::new_err(
-            "Response body has been already read",
-        ))
     }
 
     pub fn to_stream(&self) -> PyResult<AsyncStream> {
-        if let Some(response) = self.response.borrow_mut().take() {
-            return Ok(AsyncStream {
+        match self.response.borrow_mut().take() {
+            Some(response) => Ok(AsyncStream {
                 response: std::sync::Arc::new(tokio::sync::Mutex::new(response)),
-            });
+            }),
+            None => Err(PyRuntimeError::new_err(
+                "Response body has been already read",
+            )),
         }
-        Err(PyRuntimeError::new_err(
-            "Response body has been already read",
-        ))
     }
 }
 

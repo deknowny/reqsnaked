@@ -10,3 +10,11 @@ impl Bytes {
         PyBytes::new(py, self.0.as_ref())
     }
 }
+
+pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> PyResult<()> {
+    let submod = PyModule::new(py, "bytes")?;
+    submod.add_class::<Bytes>()?;
+    library.add_class::<Bytes>()?;
+    parent_module.add_submodule(submod)?;
+    Ok(())
+}

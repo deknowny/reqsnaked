@@ -1,22 +1,24 @@
 use pyo3::prelude::*;
 
 use crate::{
-    primitives::{self, BasicAuth},
-    py2rs::{base::ToNative, duration::PyDurationAnalog}, aio::multipart::{form::AsyncMultipart, self},
+    aio::multipart::form::Multipart,
+    exceptions::{wrap_reqwest_error, BorrowingError, RACE_CONDITION_ERROR_MSG},
+    py2rs::{self, base::ToNative, duration::PyDurationAnalog},
 };
 
 #[pyclass]
 pub struct Request {
-    pub method: primitives::HTTPMethod,
-    pub url: primitives::URL,
+    pub method: py2rs::http_method::HTTPMethod,
+    pub url: py2rs::url::URL,
     pub headers: Option<std::collections::HashMap<String, String>>,
     pub query: Option<std::collections::HashMap<String, String>>,
     pub form: Option<std::collections::HashMap<String, String>>,
     pub bearer_auth: Option<String>,
     pub body: Option<Vec<u8>>,
     pub timeout: Option<std::time::Duration>,
-    pub basic_auth: Option<BasicAuth>,
-    pub multipart: Option<std::cell::RefCell<Option<reqwest::multipart::Form>>>
+    pub multipart: Option<std::cell::RefCell<Option<reqwest::multipart::Form>>>,
+    pub username: Option<String>,
+    pub password: Option<String>,
 }
 
 impl Request {
@@ -42,14 +44,19 @@ impl Request {
         if let Some(ref timeout) = self.timeout {
             request = request.timeout(*timeout);
         }
-        if let Some(ref basic_auth) = self.basic_auth {
-            request = request.basic_auth(basic_auth.username.clone(), basic_auth.password.clone());
+        if let Some(ref username) = self.username {
+            request = request.basic_auth(username.clone(), self.password.clone());
         }
         if let Some(ref multipart) = self.multipart {
-            request = request.multipart(multipart.borrow_mut().take().unwrap());
+            request = request.multipart(
+                multipart
+                    .borrow_mut()
+                    .take()
+                    .ok_or(BorrowingError::new_err(RACE_CONDITION_ERROR_MSG))?,
+            );
         }
 
-        Ok(request.build().unwrap())
+        Ok(request.build().map_err(wrap_reqwest_error)?)
     }
 }
 
@@ -58,16 +65,17 @@ impl Request {
     // TODO: More params
     #[new]
     pub fn new(
-        method: primitives::HTTPMethod,
-        url: primitives::URL,
+        method: py2rs::http_method::HTTPMethod,
+        url: py2rs::url::URL,
         headers: Option<std::collections::HashMap<String, String>>,
         query: Option<std::collections::HashMap<String, String>>,
         form: Option<std::collections::HashMap<String, String>>,
         bearer_auth: Option<String>,
         body: Option<Vec<u8>>,
         timeout: Option<PyDurationAnalog>,
-        basic_auth: Option<BasicAuth>,
-        multipart: Option<&PyCell<AsyncMultipart>>
+        multipart: Option<&PyCell<Multipart>>,
+        username: Option<String>,
+        password: Option<String>,
     ) -> PyResult<Self> {
         Ok(Request {
             method,
@@ -77,13 +85,14 @@ impl Request {
             form,
             bearer_auth,
             body,
-            basic_auth,
+            username,
+            password,
             multipart: {
-                multipart.and_then(
-                    |inner| Some(
-                        std::cell::RefCell::new(Some(inner.borrow_mut().0.borrow_mut().take().unwrap()))
-                    )
-                )
+                multipart.and_then(|inner| {
+                    Some(std::cell::RefCell::new(
+                        inner.borrow_mut().0.borrow_mut().take(),
+                    ))
+                })
             },
             timeout: {
                 if let Some(inner) = timeout {
