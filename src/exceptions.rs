@@ -1,6 +1,7 @@
 use pyo3::{
     create_exception,
     exceptions::{PyException, PyRuntimeError},
+    prelude::*,
 };
 
 pub const RACE_CONDITION_ERROR_MSG: &'static str = r#"Due Rust's memory managment approach of owning,
@@ -53,4 +54,70 @@ pub fn wrap_reqwest_error(error: reqwest::Error) -> pyo3::PyErr {
     } else {
         return UnknownError::new_err(format!("Unknown error occured: {:?}", error));
     }
+}
+
+pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> PyResult<()> {
+    let submod = PyModule::new(py, "exceptions")?;
+    submod.add(stringify!(BorrowingError), py.get_type::<BorrowingError>())?;
+    library.add(stringify!(BorrowingError), py.get_type::<BorrowingError>())?;
+
+    submod.add(
+        stringify!(BaseReqwestError),
+        py.get_type::<BaseReqwestError>(),
+    )?;
+    library.add(
+        stringify!(BaseReqwestError),
+        py.get_type::<BaseReqwestError>(),
+    )?;
+
+    submod.add(stringify!(BodyError), py.get_type::<BodyError>())?;
+    library.add(stringify!(BodyError), py.get_type::<BodyError>())?;
+
+    submod.add(stringify!(BuilderError), py.get_type::<BuilderError>())?;
+    library.add(stringify!(BuilderError), py.get_type::<BuilderError>())?;
+
+    submod.add(
+        stringify!(ConnectionError),
+        py.get_type::<ConnectionError>(),
+    )?;
+    library.add(
+        stringify!(ConnectionError),
+        py.get_type::<ConnectionError>(),
+    )?;
+
+    submod.add(stringify!(DecodingError), py.get_type::<DecodingError>())?;
+    library.add(stringify!(DecodingError), py.get_type::<DecodingError>())?;
+
+    submod.add(stringify!(RedirectError), py.get_type::<RedirectError>())?;
+    library.add(stringify!(RedirectError), py.get_type::<RedirectError>())?;
+
+    submod.add(stringify!(TimeoutError), py.get_type::<TimeoutError>())?;
+    library.add(stringify!(TimeoutError), py.get_type::<TimeoutError>())?;
+
+    submod.add(stringify!(StatusError), py.get_type::<StatusError>())?;
+    library.add(stringify!(StatusError), py.get_type::<StatusError>())?;
+
+    submod.add(stringify!(RequestError), py.get_type::<RequestError>())?;
+    library.add(stringify!(RequestError), py.get_type::<RequestError>())?;
+
+    submod.add(stringify!(UnknownError), py.get_type::<UnknownError>())?;
+    library.add(stringify!(UnknownError), py.get_type::<UnknownError>())?;
+
+    submod.add(
+        stringify!(HTTPMethodParseError),
+        py.get_type::<HTTPMethodParseError>(),
+    )?;
+    library.add(
+        stringify!(HTTPMethodParseError),
+        py.get_type::<HTTPMethodParseError>(),
+    )?;
+
+    submod.add(stringify!(URLParseError), py.get_type::<URLParseError>())?;
+    library.add(stringify!(URLParseError), py.get_type::<URLParseError>())?;
+
+    submod.add(stringify!(MIMEParseError), py.get_type::<MIMEParseError>())?;
+    library.add(stringify!(MIMEParseError), py.get_type::<MIMEParseError>())?;
+
+    parent_module.add_submodule(submod)?;
+    Ok(())
 }

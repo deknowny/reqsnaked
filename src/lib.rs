@@ -10,5 +10,6 @@ pub mod rs2py;
 fn reqsnaked(py: Python, module: &PyModule) -> PyResult<()> {
     aio::init_module(py, module, module)?;
     rs2py::init_module(py, module, module)?;
+    exceptions::init_module(py, module, module)?;
     Ok(())
 }
