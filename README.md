@@ -6,6 +6,9 @@ Reqsnaked is a blazing fast async/await HTTP client for Python written on Rust u
 * Memory-efficient lazy JSON parser
 * Fully-typed even being written on Rust
 
+***
+__Docs__: [https://deknowny.github.io/reqsnaked/latest/](https://deknowny.github.io/reqsnaked/latest/)
+
 ## Overview
 ```python title="Example"
 import asyncio
