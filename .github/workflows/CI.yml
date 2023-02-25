@@ -45,7 +45,7 @@ jobs:
       run: python -m pip install maturin
 
     - name: Build with maturin
-      run: maturin build --release --no-sdist -o dist
+      run: maturin build --release -o dist
 
     - name: Upload wheels
       uses: actions/upload-artifact@v2
@@ -63,7 +63,7 @@ jobs:
     - uses: messense/maturin-action@v1
       with:
         command: build
-        args: --release --no-sdist -o dist --universal2
+        args: --release -o dist --universal2
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
