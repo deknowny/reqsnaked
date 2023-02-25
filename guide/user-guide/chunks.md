@@ -1,4 +1,4 @@
-Chunks is way to ready response body partially without awaiting when the whole body will be sent. It's useful when response is large. Use this pattern to iterate over chunks
+Chunks is way to read response body partially without awaiting when the whole body will be sent. It's useful when response is large. Use this pattern to iterate over chunks
 
 ```python title="Get image by parts"
 client = reqsnaked.Client()
