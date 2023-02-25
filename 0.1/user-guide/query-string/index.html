@@ -11,6 +11,10 @@
       
       
       
+        <link rel="prev" href="../headers/">
+      
+      
+        <link rel="next" href="../cookies/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.14">
@@ -69,6 +73,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#send-request-with-query-string" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -246,14 +255,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
       
       
       
@@ -262,7 +273,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           User Guide
@@ -315,6 +326,30 @@
               
   
   
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Query string
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
   
     <li class="md-nav__item">
       <a href="../cookies/" class="md-nav__link">
@@ -348,6 +383,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -365,9 +402,82 @@
   
 
 
-  <h1>Query string</h1>
+<h1 id="send-request-with-query-string">Send request with query string</h1>
+<p>Simply to add query params to request, you need to pass a dict with headers into <code>reqsnaked.Request</code> construction.</p>
+<div class="highlight"><pre><span></span><code><span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+    <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<details class="abstract">
+<summary>Full code preview</summary>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">reqsnaked</span>
 
 
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+        <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
+        <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="c1"># httpbin returns query string we passed in the response</span>
+    <span class="n">content</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">)</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+</code></pre></div></p>
+</details>
+<p>You can also combine query string from params and hardcoded (params will override hardcoded)</p>
+<div class="highlight"><pre><span></span><code><span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+<span class="hll">    <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything?fizz=bazz&quot;</span><span class="p">,</span>
+</span>    <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<details class="abstract">
+<summary>Full code preview</summary>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">reqsnaked</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+        <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything?fizz=bazz&quot;</span><span class="p">,</span>
+        <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="c1"># httpbin returns query string we passed in the response</span>
+    <span class="n">content</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">)</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;fizz&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bazz&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span>
+<span class="p">}</span>
+</code></pre></div></p>
+</details>
+<hr />
+<p>It supports a few standart python types so params like this:
+<div class="highlight"><pre><span></span><code><span class="n">query</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;array&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">123</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span>
+    <span class="s2">&quot;nothing&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="mf">6.332</span><span class="p">,</span>
+    <span class="s2">&quot;boolean&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>Will produce such query string
+<div class="highlight"><pre><span></span><code>nothing=null&amp;boolean=1&amp;array=bar&amp;array=-123&amp;array=0&amp;float=6.332
+</code></pre></div></p>
 
 
 
