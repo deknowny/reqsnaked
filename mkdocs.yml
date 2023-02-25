@@ -28,9 +28,8 @@ nav:
     - Cookies: user-guide/cookies.md
     - Raw response: user-guide/raw-response.md
     - Chunks (streaming response): user-guide/chunks.md
-
   - For contributors: contributing.md
-  - Support us: suuport.md
+  - Support us: support.md
 
 
 
@@ -71,8 +70,8 @@ extra:
 
 
 plugins:
-  # - social:
-  #     cards_dir: assets/
+  - social:
+      cards_dir: assets/
   - search:
       separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
 
