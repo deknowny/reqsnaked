@@ -1,17 +1,12 @@
 # Title of the site
 site_name: "Reqsnaked"
-
-# Description of the site
+site_url: https://deknowny.github.io/reqsnaked/
 site_description: Reqsnaked python library guide
-
-# URL for pages editing
 repo_url: https://github.com/deknowny/reqsnaked/tree/main/
-
-# Branch chosen when routing to repository
+edit_uri: blob/main/guide/
 remote_branch: main
-
-# Where md files are stored
 docs_dir: guide
+site_author: Deknowny
 
 # Site's content
 nav:
