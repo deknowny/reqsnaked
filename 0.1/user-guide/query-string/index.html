@@ -14,7 +14,7 @@
         <link rel="prev" href="../headers/">
       
       
-        <link rel="next" href="../cookies/">
+        <link rel="next" href="../form/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.14">
@@ -352,6 +352,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../form/" class="md-nav__link">
+        Forms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../cookies/" class="md-nav__link">
         Cookies
       </a>
@@ -403,7 +417,7 @@
 
 
 <h1 id="send-request-with-query-string">Send request with query string</h1>
-<p>Simply to add query params to request, you need to pass a dict with headers into <code>reqsnaked.Request</code> construction.</p>
+<p>Simply to add query params to request, you need to pass a dict with params into <code>reqsnaked.Request</code> construction.</p>
 <div class="highlight"><pre><span></span><code><span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
     <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
     <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
