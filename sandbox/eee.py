@@ -5,8 +5,8 @@ import reqsnaked
 async def main():
     client = reqsnaked.Client()
     request = reqsnaked.Request(
-        "GET", "https://httpbin.org/anything",
-        query={
+        "POST", "https://httpbin.org/anything",
+        form={
             "array": ["bar", -123, False],
             "nothing": None,
             "float": 6.332,

@@ -17,7 +17,7 @@ pub struct Request {
     pub url: py2rs::url::URL,
     pub headers: Option<std::collections::HashMap<String, String>>,
     pub query: Option<Vec<(String, String)>>,
-    pub form: Option<std::collections::HashMap<String, String>>,
+    pub form: Option<Vec<(String, String)>>,
     pub bearer_auth: Option<String>,
     pub body: Option<Vec<u8>>,
     pub timeout: Option<std::time::Duration>,
@@ -65,6 +65,37 @@ impl Request {
     }
 }
 
+
+pub fn query_hashmap_to_vec(
+    query: std::collections::HashMap<String, QueryParam>
+) -> Vec<(String, String)> {
+    let mut query_vec = vec![];
+    for (key, value) in query {
+        match value {
+            QueryParam::Array(array) => {
+                for elem in array {
+                    query_vec.push((
+                        key.clone(),
+                        match elem {
+                            QueryVecParam::Integer(value) => value.to_string(),
+                            QueryVecParam::Boolean(value) => value.to_string(),
+                            QueryVecParam::Number(value) => value.to_string(),
+                            QueryVecParam::Null(_) => "null".to_string(),
+                            QueryVecParam::String(value) => value.to_string(),
+                        },
+                    ));
+                }
+            }
+            QueryParam::Integer(value) => query_vec.push((key, value.to_string())),
+            QueryParam::Boolean(value) => query_vec.push((key, value.to_string())),
+            QueryParam::Number(value) => query_vec.push((key, value.to_string())),
+            QueryParam::Null(_) => query_vec.push((key, "null".to_string())),
+            QueryParam::String(value) => query_vec.push((key, value.to_string())),
+        };
+    }
+    query_vec
+}
+
 #[pymethods]
 impl Request {
     // TODO: More params
@@ -74,7 +105,7 @@ impl Request {
         url: py2rs::url::URL,
         headers: Option<std::collections::HashMap<String, String>>,
         query: Option<std::collections::HashMap<String, QueryParam>>,
-        form: Option<std::collections::HashMap<String, String>>,
+        form: Option<std::collections::HashMap<String, QueryParam>>,
         bearer_auth: Option<String>,
         body: Option<Vec<u8>>,
         timeout: Option<PyDurationAnalog>,
@@ -86,36 +117,8 @@ impl Request {
             method,
             url,
             headers,
-            query: {
-                query.and_then(|query| {
-                    let mut query_vec = vec![];
-                    for (key, value) in query {
-                        match value {
-                            QueryParam::Array(array) => {
-                                for elem in array {
-                                    query_vec.push((
-                                        key.clone(),
-                                        match elem {
-                                            QueryVecParam::Integer(value) => value.to_string(),
-                                            QueryVecParam::Boolean(value) => value.to_string(),
-                                            QueryVecParam::Number(value) => value.to_string(),
-                                            QueryVecParam::Null(_) => "null".to_string(),
-                                            QueryVecParam::String(value) => value.to_string(),
-                                        },
-                                    ));
-                                }
-                            }
-                            QueryParam::Integer(value) => query_vec.push((key, value.to_string())),
-                            QueryParam::Boolean(value) => query_vec.push((key, value.to_string())),
-                            QueryParam::Number(value) => query_vec.push((key, value.to_string())),
-                            QueryParam::Null(_) => query_vec.push((key, "null".to_string())),
-                            QueryParam::String(value) => query_vec.push((key, value.to_string())),
-                        };
-                    }
-                    Some(query_vec)
-                })
-            },
-            form,
+            query: query.and_then(|query| Some(query_hashmap_to_vec(query))),
+            form: form.and_then(|query| Some(query_hashmap_to_vec(query))),
             bearer_auth,
             body,
             username,

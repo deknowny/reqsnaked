@@ -1,5 +1,5 @@
 # Send request with query string
-Simply to add query params to request, you need to pass a dict with headers into `reqsnaked.Request` construction.
+Simply to add query params to request, you need to pass a dict with params into `reqsnaked.Request` construction.
 
 ```python
 request = reqsnaked.Request(

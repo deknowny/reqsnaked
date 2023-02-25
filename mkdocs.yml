@@ -21,7 +21,9 @@ nav:
     - Understand the basics: user-guide/basics.md
     - Headers: user-guide/headers.md
     - Query string: user-guide/query-string.md
+    - Forms: user-guide/form.md
     - Cookies: user-guide/cookies.md
+
 
 
 # Theme preference. Use `mkdocs-material`
