@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: '3.8'
     - name: Install libssl-dev
-      command: sudo apt-get install libssl-dev
+      run: sudo apt-get install libssl-dev
     - uses: messense/maturin-action@v1
       with:
         manylinux: auto
