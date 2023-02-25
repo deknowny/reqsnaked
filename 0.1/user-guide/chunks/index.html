@@ -617,7 +617,7 @@
 
   <h1>Chunks (streaming response)</h1>
 
-<p>Chunks is way to ready response body partially without awaiting when the whole body will be sent. It's useful when response is large. Use this pattern to iterate over chunks</p>
+<p>Chunks is way to read response body partially without awaiting when the whole body will be sent. It's useful when response is large. Use this pattern to iterate over chunks</p>
 <div class="highlight"><span class="filename">Get image by parts</span><pre><span></span><code><span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
     <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/image/jpeg&quot;</span><span class="p">,</span>  <span class="c1"># (1)</span>
