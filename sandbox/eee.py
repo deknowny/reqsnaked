@@ -6,7 +6,7 @@ async def main():
     client = reqsnaked.Client()
     request = reqsnaked.Request(
         "POST", "https://httpbin.org/anything",
-        form={
+        json={
             "array": ["bar", -123, False],
             "nothing": None,
             "float": 6.332,

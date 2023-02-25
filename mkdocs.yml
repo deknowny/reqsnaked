@@ -22,7 +22,9 @@ nav:
     - Headers: user-guide/headers.md
     - Query string: user-guide/query-string.md
     - Forms: user-guide/form.md
+    - JSONs: user-guide/json.md
     - Cookies: user-guide/cookies.md
+
 
 
 

@@ -10,10 +10,10 @@ use pyo3::prelude::*;
 #[serde(untagged)]
 pub enum PySerde {
     Object(HashMap<String, PySerde>),
+    Boolean(bool),
     Number(isize),
     Float(f64),
     String(String),
-    Boolean(bool),
     Null(Option<isize>),
     Array(Vec<PySerde>),
 }

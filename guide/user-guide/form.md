@@ -22,7 +22,7 @@ request = reqsnaked.Request(
         )
         response = await client.send(request)
         content = await response.json()
-        # httpbin returns query string we passed in the response
+        # httpbin returns form we passed in the response
         content.show("form")
 
 

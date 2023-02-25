@@ -8,7 +8,7 @@ use crate::{
         base::ToNative,
         duration::PyDurationAnalog,
         query::{QueryParam, QueryVecParam},
-    },
+    }, json::PySerde,
 };
 
 #[pyclass]
@@ -18,6 +18,7 @@ pub struct Request {
     pub headers: Option<std::collections::HashMap<String, String>>,
     pub query: Option<Vec<(String, String)>>,
     pub form: Option<Vec<(String, String)>>,
+    pub json: Option<PySerde>,
     pub bearer_auth: Option<String>,
     pub body: Option<Vec<u8>>,
     pub timeout: Option<std::time::Duration>,
@@ -39,6 +40,9 @@ impl Request {
         }
         if let Some(ref form) = self.form {
             request = request.form(form);
+        }
+        if let Some(ref json) = self.json {
+            request = request.json(json);
         }
         if let Some(ref bearer_auth) = self.bearer_auth {
             request = request.bearer_auth(bearer_auth);
@@ -106,6 +110,7 @@ impl Request {
         headers: Option<std::collections::HashMap<String, String>>,
         query: Option<std::collections::HashMap<String, QueryParam>>,
         form: Option<std::collections::HashMap<String, QueryParam>>,
+        json: Option<PySerde>,
         bearer_auth: Option<String>,
         body: Option<Vec<u8>>,
         timeout: Option<PyDurationAnalog>,
@@ -121,6 +126,7 @@ impl Request {
             form: form.and_then(|query| Some(query_hashmap_to_vec(query))),
             bearer_auth,
             body,
+            json,
             username,
             password,
             multipart: {
