@@ -31,6 +31,8 @@ nav:
 # Theme preference. Use `mkdocs-material`
 theme:
   name: material
+  favicon: assets/reqsnaked-white.png
+  logo: assets/reqsnaked-white.png
   palette:
     - scheme: default
       primary: blue grey
