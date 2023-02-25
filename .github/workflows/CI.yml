@@ -21,6 +21,7 @@ jobs:
         args: --release -o dist
       env:
           PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig
+          OPENSSL_DIR: /usr/local/ssl/
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
