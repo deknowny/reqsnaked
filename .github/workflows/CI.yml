@@ -19,7 +19,7 @@ jobs:
         manylinux: auto
         command: build
         args: --release -o dist
-      env:
+      # env:
           # OPENSSL_DIR: /usr/local/ssl/
           # OPENSSL_INCLUDE_DIR: /usr/include/openssl
     - name: Upload wheels
