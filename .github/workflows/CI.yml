@@ -5,29 +5,6 @@ on:
   pull_request:
 
 jobs:
-  linux:
-    runs-on: 	ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.8'
-    - name: Install libssl-dev
-      run: sudo dpkg --add-architecture i386 && sudo apt update && sudo apt install openssl libudev-dev libssl-dev pkg-config && apt install libssl-dev:i386
-    - uses: messense/maturin-action@v1
-      with:
-        manylinux: auto
-        command: build
-        args: --release -o dist
-      # env:
-          # OPENSSL_DIR: /usr/local/ssl/
-          # OPENSSL_INCLUDE_DIR: /usr/include/openssl
-    - name: Upload wheels
-      uses: actions/upload-artifact@v2
-      with:
-        name: wheels
-        path: dist
-
   windows:
     runs-on: windows-latest
     steps:
