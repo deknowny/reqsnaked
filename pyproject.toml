@@ -16,5 +16,7 @@ classifiers = [
 docs = [
     "mkdocs==1.4.2",
     "mkdocs-material==9.0.14",
-    "mike==1.1.2"
+    "mike==1.1.2",
+    "pillow==9.4.0",
+    "cairosvg==2.6.0"
 ]

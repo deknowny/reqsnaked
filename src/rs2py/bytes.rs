@@ -1,7 +1,8 @@
 use pyo3::{prelude::*, types::PyBytes};
 
+
 #[derive(Clone)]
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct Bytes(pub bytes::Bytes);
 
 #[pymethods]
