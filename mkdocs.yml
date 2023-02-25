@@ -23,6 +23,7 @@ nav:
     - Query string: user-guide/query-string.md
     - Forms: user-guide/form.md
     - JSONs: user-guide/json.md
+    - Authentication: user-guide/auth.md
     - Cookies: user-guide/cookies.md
 
 
