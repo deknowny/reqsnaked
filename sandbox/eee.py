@@ -5,11 +5,10 @@ import reqsnaked
 async def main():
     client = reqsnaked.Client()
     request = reqsnaked.Request(
-        "POST", "https://httpbin.org/anything",
-        bearer_auth="fizzbazzeggg",
+        "GET", "https://httpbin.org/bytes/10",
     )
     response = await client.send(request)
-    data = await response.json()
-    print(data.query("headers", "Authorization"))
+    data = await response.read()
+    print(data.as_bytes())
 
 asyncio.run(main())
