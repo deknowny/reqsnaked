@@ -15,8 +15,8 @@ impl ToNative for PyDurationAnalog<'_> {
     fn to_native(&self) -> PyResult<Self::Native> {
         match self {
             Self::TimeDelta(value) => {
-                let total_seconds: u64 = value.call_method0("total_seconds")?.extract()?;
-                Ok(std::time::Duration::from_secs(total_seconds))
+                let total_seconds: f64 = value.call_method0("total_seconds")?.extract()?;
+                Ok(std::time::Duration::from_secs(total_seconds.round() as u64))
             }
             Self::Seconds(value) => Ok(std::time::Duration::from_secs(*value)),
         }
