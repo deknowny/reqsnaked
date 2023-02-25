@@ -11,13 +11,17 @@
       
       
       
+        <link rel="prev" href="../auth/">
+      
+      
+        <link rel="next" href="../cookies/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.14">
     
     
       
-        <title>What is `reqsnaked.Request`? - Reqsnaked</title>
+        <title>Multipart - Reqsnaked</title>
       
     
     
@@ -70,11 +74,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#what-is-reqsnakedrequest" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -108,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              What is `reqsnaked.Request`?
+              Multipart
             
           </span>
         </div>
@@ -251,14 +250,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
       
       
       
@@ -267,7 +268,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           User Guide
@@ -376,10 +377,60 @@
               
   
   
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Multipart
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
   
     <li class="md-nav__item">
       <a href="../cookies/" class="md-nav__link">
         Cookies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raw-response/" class="md-nav__link">
+        Raw response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chunks/" class="md-nav__link">
+        Chunks (streaming response)
       </a>
     </li>
   
@@ -409,58 +460,6 @@
   
   
   
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#http-method" class="md-nav__link">
-    HTTP method
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#urls" class="md-nav__link">
-    URLs
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#headers" class="md-nav__link">
-    Headers
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#query-string" class="md-nav__link">
-    Query string
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#form" class="md-nav__link">
-    Form
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    ....
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -478,22 +477,59 @@
   
 
 
-<h1 id="what-is-reqsnakedrequest">What is <code>reqsnaked.Request</code>?</h1>
-<p>...</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>If you know a <code class="highlight"><span class="n">reqwest</span>::<span class="n">Request</span></code>/<code class="highlight"><span class="n">reqwest</span>::<span class="n">RequestBuilder</span></code> feature that did not implemented by <code>reqsnaked</code>, a PR would be a pleasure.</p>
+  <h1>Multipart</h1>
+
+<p>To send <code>multipart/form-data</code> request, pass an object to <code class="highlight"><span class="n">multipart</span><span class="o">=</span></code> param</p>
+<div class="highlight"><span class="filename">Send two files</span><pre><span></span><code><span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+    <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
+    <span class="n">multipart</span><span class="o">=</span><span class="n">reqsnaked</span><span class="o">.</span><span class="n">Multipart</span><span class="p">(</span>
+        <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span>
+            <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;000&quot;</span>
+            <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;foo.txt&quot;</span><span class="p">,</span>
+            <span class="n">mime</span><span class="o">=</span><span class="s2">&quot;text/plain&quot;</span>
+        <span class="p">),</span>
+        <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span>
+            <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;111&quot;</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;bar.txt&quot;</span><span class="p">,</span>
+            <span class="n">mime</span><span class="o">=</span><span class="s2">&quot;text/plain&quot;</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+<details class="abstract">
+<summary>Full code preview</summary>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">reqsnaked</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+        <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
+        <span class="n">multipart</span><span class="o">=</span><span class="n">reqsnaked</span><span class="o">.</span><span class="n">Multipart</span><span class="p">(</span>
+            <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;000&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;foo.txt&quot;</span><span class="p">,</span>
+                            <span class="n">mime</span><span class="o">=</span><span class="s2">&quot;text/plain&quot;</span><span class="p">),</span>
+            <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Part</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;111&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;bar.txt&quot;</span><span class="p">,</span>
+                        <span class="n">mime</span><span class="o">=</span><span class="s2">&quot;text/plain&quot;</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="c1"># httpbin returns query string we passed in the response</span>
+    <span class="n">content</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;bar&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;111&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;000&quot;</span>
+<span class="p">}</span>
+</code></pre></div></p>
+</details>
+<div class="admonition todo">
+<p class="admonition-title">Todo</p>
+<p>Currently, only raw bytes and strings are supported for content, <code>io</code> objects are coming soon</p>
 </div>
-<h2 id="http-method">HTTP method</h2>
-<p>...</p>
-<h2 id="urls">URLs</h2>
-<p>...</p>
-<h2 id="headers">Headers</h2>
-<p>...</p>
-<h2 id="query-string">Query string</h2>
-<p>...</p>
-<h2 id="form">Form</h2>
-<h2 id="_1">....</h2>
 
 
 
