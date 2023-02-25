@@ -17,7 +17,7 @@ pub enum PartData {
 #[pymethods]
 impl Part {
     #[new]
-    pub fn text(
+    pub fn new(
         name: String,
         value: PartData,
         filename: Option<String>,

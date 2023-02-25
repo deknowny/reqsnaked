@@ -7,7 +7,7 @@ import reqsnaked
 async def main():
     client = reqsnaked.Client(
         user_agent="Reqsnaked/1.0",
-        headers={"X-Foo": "bar"}
+        headers={"X-Foo": "bar"},
     )
     response = await client.send(
         reqsnaked.Request(
