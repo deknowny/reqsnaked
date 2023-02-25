@@ -2,7 +2,7 @@
 site_name: "Reqsnaked"
 site_url: https://deknowny.github.io/reqsnaked/
 site_description: Reqsnaked python library guide
-repo_url: https://github.com/deknowny/reqsnaked/tree/main/
+repo_url: https://github.com/deknowny/reqsnaked/
 edit_uri: blob/main/guide/
 remote_branch: main
 docs_dir: guide
@@ -55,6 +55,8 @@ theme:
     - navigation.tabs
     - search.highlight
     - search.share
+    - content.action.edit
+    - content.action.view
 
 
 
