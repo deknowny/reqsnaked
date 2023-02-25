@@ -32,7 +32,7 @@ pub struct AsyncResponse {
     pub response: std::cell::RefCell<Option<reqwest::Response>>,
     pub status: reqwest::StatusCode,
     pub version: reqwest::Version,
-    pub headers: reqwest::header::HeaderMap
+    pub headers: reqwest::header::HeaderMap,
 }
 
 #[pymethods]

@@ -20,6 +20,7 @@ nav:
     - Introduction: user-guide/index.md
     - Understand the basics: user-guide/basics.md
     - Headers: user-guide/headers.md
+    - Query string: user-guide/query-string.md
     - Cookies: user-guide/cookies.md
 
 

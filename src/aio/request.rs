@@ -3,7 +3,12 @@ use pyo3::prelude::*;
 use crate::{
     aio::multipart::form::Multipart,
     exceptions::{wrap_reqwest_error, BorrowingError, RACE_CONDITION_ERROR_MSG},
-    py2rs::{self, base::ToNative, duration::PyDurationAnalog},
+    py2rs::{
+        self,
+        base::ToNative,
+        duration::PyDurationAnalog,
+        query::{QueryParam, QueryVecParam},
+    },
 };
 
 #[pyclass]
@@ -11,7 +16,7 @@ pub struct Request {
     pub method: py2rs::http_method::HTTPMethod,
     pub url: py2rs::url::URL,
     pub headers: Option<std::collections::HashMap<String, String>>,
-    pub query: Option<std::collections::HashMap<String, String>>,
+    pub query: Option<Vec<(String, String)>>,
     pub form: Option<std::collections::HashMap<String, String>>,
     pub bearer_auth: Option<String>,
     pub body: Option<Vec<u8>>,
@@ -68,7 +73,7 @@ impl Request {
         method: py2rs::http_method::HTTPMethod,
         url: py2rs::url::URL,
         headers: Option<std::collections::HashMap<String, String>>,
-        query: Option<std::collections::HashMap<String, String>>,
+        query: Option<std::collections::HashMap<String, QueryParam>>,
         form: Option<std::collections::HashMap<String, String>>,
         bearer_auth: Option<String>,
         body: Option<Vec<u8>>,
@@ -81,7 +86,35 @@ impl Request {
             method,
             url,
             headers,
-            query,
+            query: {
+                query.and_then(|query| {
+                    let mut query_vec = vec![];
+                    for (key, value) in query {
+                        match value {
+                            QueryParam::Array(array) => {
+                                for elem in array {
+                                    query_vec.push((
+                                        key.clone(),
+                                        match elem {
+                                            QueryVecParam::Integer(value) => value.to_string(),
+                                            QueryVecParam::Boolean(value) => value.to_string(),
+                                            QueryVecParam::Number(value) => value.to_string(),
+                                            QueryVecParam::Null(_) => "null".to_string(),
+                                            QueryVecParam::String(value) => value.to_string(),
+                                        },
+                                    ));
+                                }
+                            }
+                            QueryParam::Integer(value) => query_vec.push((key, value.to_string())),
+                            QueryParam::Boolean(value) => query_vec.push((key, value.to_string())),
+                            QueryParam::Number(value) => query_vec.push((key, value.to_string())),
+                            QueryParam::Null(_) => query_vec.push((key, "null".to_string())),
+                            QueryParam::String(value) => query_vec.push((key, value.to_string())),
+                        };
+                    }
+                    Some(query_vec)
+                })
+            },
             form,
             bearer_auth,
             body,
