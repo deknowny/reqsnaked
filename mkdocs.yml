@@ -68,6 +68,9 @@ extra:
 
 plugins:
   - social:
+      cards_color:
+        fill: "#282c36"
+        text: "#FFFFFF"
       cards_dir: assets/
   - search:
       separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
