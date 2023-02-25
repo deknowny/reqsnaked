@@ -59,6 +59,7 @@ theme:
     - search.share
     - content.action.edit
     - content.action.view
+    - navigation.footer
 
 
 
@@ -81,6 +82,9 @@ extra_css:
   - css/theme.css
 
 extra:
+  social:
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/reqsnaked
   version:
     provider: mike
     default: latest
