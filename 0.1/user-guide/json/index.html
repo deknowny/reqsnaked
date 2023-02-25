@@ -11,17 +11,17 @@
       
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../form/">
       
       
-        <link rel="next" href="../headers/">
+        <link rel="next" href="../cookies/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.14">
     
     
       
-        <title>Understand the basics - Reqsnaked</title>
+        <title>JSONs - Reqsnaked</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#send-a-request" class="md-skip">
+        <a href="#send-applicationjson" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Understand the basics
+              JSONs
             
           </span>
         </div>
@@ -298,62 +298,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Understand the basics
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../basics/" class="md-nav__link">
         Understand the basics
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#send-a-request" class="md-nav__link">
-    Send a request
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#process-the-response" class="md-nav__link">
-    Process the response
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#read-more" class="md-nav__link">
-    Read more
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -405,11 +354,55 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../json/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          JSONs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         JSONs
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#send-applicationjson" class="md-nav__link">
+    Send application/json
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-json-from-body" class="md-nav__link">
+    Read JSON from body
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -460,22 +453,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#send-a-request" class="md-nav__link">
-    Send a request
+  <a href="#send-applicationjson" class="md-nav__link">
+    Send application/json
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#process-the-response" class="md-nav__link">
-    Process the response
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#read-more" class="md-nav__link">
-    Read more
+  <a href="#read-json-from-body" class="md-nav__link">
+    Read JSON from body
   </a>
   
 </li>
@@ -498,78 +484,155 @@
   
 
 
-  <h1>Understand the basics</h1>
+  <h1>JSONs</h1>
 
-<h2 id="send-a-request">Send a request</h2>
-<p>The first step to make any HTTP request is create <code>reqsnaked.Client</code> instance. It introduces an asynchronous method to send a <code>reqsnaked.Request</code> and enables some customization that shares across all requests. It keeps connection to hosts alive, so it's useful to create only one client.</p>
-<p>Client could be created with or without a running event loop instantly. As it does all asynchronoues HTTP libraries, client should be closed in async style after usage, but it's not required for <code>reqsnaked</code> because internally it uses RAII approach and connection will be closed automatically.</p>
-<p><div class="highlight"><span class="filename">A simple GET request</span><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
-
-<span class="kn">import</span> <span class="nn">reqsnaked</span>
-
-
-<span class="c1"># Note that you should not close the connection</span>
-<span class="c1"># as it happends using RAII approach</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">client</span>  <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-    <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-
-
-<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>200
-</code></pre></div></p>
-<h2 id="process-the-response">Process the response</h2>
-<p>After recieving the response, body could be accessed in different ways, for example, as JSON. The client will not await the whole response to be written, so at this step only status code, HTTP version and headers can be access before the body actually will be read, that's why it's neccessary use another one <code class="highlight"><span class="k">await</span></code>.</p>
-<div class="highlight"><span class="filename">Get response body as JSON</span><pre><span></span><code><span class="n">client</span>  <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
-    <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
-    <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>  <span class="c1"># (1)</span>
+<h2 id="send-applicationjson">Send <code>application/json</code></h2>
+<p>Simply to add json to request, you need to pass a dict with params into <code>reqsnaked.Request</code> construction.</p>
+<div class="highlight"><pre><span></span><code><span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+    <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
+    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
 <span class="p">)</span>
-<span class="c1"># Await first part of the response</span>
-<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-
-<span class="c1"># Await body and try decode it as JSON</span>
-<span class="hll"><span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-</span><span class="n">body</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">)</span> <span class="c1"># (2)</span>
-</code></pre></div>
-<ol>
-<li>Query string are arguments passed after URL's path so actually URL transforms to this:
-<div class="highlight"><pre><span></span><code>https://httpbin.org/anything?foo=bar
-</code></pre></div>
-You can read more about how use query string in <code>reqsnaked</code> <a href="../query-string/">there</a>.</li>
-<li>Httpbin's <code>/anything</code> endpoint returns everything we passed, so <code class="highlight"><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">)</span></code> used to print <code class="highlight"><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span></code> from the response body.</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">}</span>
 </code></pre></div>
 <details class="abstract">
 <summary>Full code preview</summary>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
 
 <span class="kn">import</span> <span class="nn">reqsnaked</span>
 
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">client</span>  <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
     <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
-        <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
-        <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>  <span class="c1"># (1)</span>
+        <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/anything&quot;</span><span class="p">,</span>
+        <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
     <span class="p">)</span>
-    <span class="c1"># Await first part of the response</span>
     <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-
-    <span class="c1"># Await body and try decode it as JSON</span>
-    <span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="n">body</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">)</span>  <span class="c1"># (2)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="c1"># httpbin returns json we passed in the response</span>
+    <span class="n">content</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span>
 
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+</code></pre></div></p>
 </details>
-<h2 id="read-more">Read more</h2>
-<p>Now you can read more about <code>reqsnaked.Client</code>, <code>reqsnaked.Request</code> and <code>reqsnaked.Response</code> in other topics.</p>
+<p>It supports all python types that a normally could be dumped using built-in <code>json</code> module. So this argument
+<div class="highlight"><pre><span></span><code><span class="n">json</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;array&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">123</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span>
+    <span class="s2">&quot;nothing&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="mf">6.332</span><span class="p">,</span>
+    <span class="s2">&quot;boolean&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>will produce such JSON
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;array&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">-123</span><span class="p">,</span>
+<span class="w">      </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;boolean&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;float&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.332</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;nothing&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h2 id="read-json-from-body">Read JSON from body</h2>
+<p>JSON could be both read and parse using <code>Response.json()</code> method. It returns a special <code>LazyJSON</code> object:</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+    <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/json&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;slideshow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;author&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Yours Truly&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;date of publication&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;slides&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Wake up to WonderWidgets!&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">&quot;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Overview&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sample Slide Show&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<details class="abstract">
+<summary>Full code preview</summary>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">reqsnaked</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+        <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/json&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+</code></pre></div></p>
+</details>
+<p>It's called "lazy" because it does not load everything into Python types immidiately. To access something use <code>.query(...)</code> method, which accepts <code class="highlight"><span class="o">*</span><span class="n">args</span></code> that uses chainly to get an object:</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+    <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/json&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;slideshow&quot;</span><span class="p">,</span> <span class="s2">&quot;slides&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&quot;Wake up to WonderWidgets!&quot;
+</code></pre></div></p>
+<details class="abstract">
+<summary>Full code preview</summary>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">reqsnaked</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">reqsnaked</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+        <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;https://httpbin.org/json&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;slideshow&quot;</span><span class="p">,</span> <span class="s2">&quot;slides&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">))</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;foo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+</code></pre></div></p>
+</details>
+<p>It's the same as you would use <code class="highlight"><span class="n">data</span><span class="p">[</span><span class="s2">&quot;slideshow&quot;</span><span class="p">][</span><span class="s2">&quot;slides&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">]</span></code> with an ordinary dict. In this case only string <code class="highlight"><span class="s2">&quot;Wake up to WonderWidgets!&quot;</span></code> will be loaded to python types, other will be stored using Rust cheap types.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The same "chaining" works for <code>.show(...)</code></p>
+</div>
+<div class="admonition failure">
+<p class="admonition-title">Failure</p>
+<p>You cannot read from body twice</p>
+</div>
 
 
 
