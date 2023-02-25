@@ -21,6 +21,7 @@ impl Client {
             Ok(AsyncResponse {
                 status: response.status(),
                 version: response.version(),
+                headers: response.headers().clone(),
                 response: std::cell::RefCell::new(Some(response)),
             })
         })

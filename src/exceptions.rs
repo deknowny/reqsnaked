@@ -4,17 +4,19 @@ use pyo3::{
     prelude::*,
 };
 
-pub const RACE_CONDITION_ERROR_MSG: &'static str = r#"Due Rust's memory managment approach of owning,
+pub const RACE_CONDITION_ERROR_MSG: &'static str = r#"Due Rust's memory managment approach of borrowing,
 you cannot use some instances for some kind of
 stuff twice as they are gone.
 
-There are 2 cases you've got this error:
+There are 3 cases you've got this error:
 1) You passed a non-clonable instance to another that requires owning
 2) You tried using method with owning twice (i.e. reading response's body twice)
+3) You tried using referencing after borrowing
 
 Potential solutions:
 1) Do not share instances, create new on every time you use it
 2) Do not do this. Try another way to solve your problem
+3) Swap calls order (referencing first)
 inner types "#;
 
 create_exception!(exceptions, BorrowingError, PyRuntimeError);

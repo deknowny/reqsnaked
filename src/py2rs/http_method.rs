@@ -6,24 +6,22 @@ use crate::exceptions::HTTPMethodParseError;
 
 use super::base::ToNative;
 
-
-
 pub struct PyHTTPMethodEnum(reqwest::Method);
 
 impl FromPyObject<'_> for PyHTTPMethodEnum {
     fn extract<'rt>(ob: &'rt PyAny) -> PyResult<Self> {
         let code: &str = ob.getattr("value")?.extract()?;
-        let method = reqwest::Method::from_str(code).map_err(|e| HTTPMethodParseError::new_err(format!("Cannot parse HTTP methods: {:?}", e)))?;
+        let method = reqwest::Method::from_str(code).map_err(|e| {
+            HTTPMethodParseError::new_err(format!("Cannot parse HTTP methods: {:?}", e))
+        })?;
         Ok(Self(method))
     }
 }
 
-
-
 #[derive(FromPyObject)]
 pub enum HTTPMethod {
     String(String),
-    HTTPMethodEnum(PyHTTPMethodEnum)
+    HTTPMethodEnum(PyHTTPMethodEnum),
 }
 
 impl ToNative for HTTPMethod {
@@ -36,8 +34,8 @@ impl ToNative for HTTPMethod {
                 parsing_result.map_err(|e| {
                     HTTPMethodParseError::new_err(format!("Cannot parse URL: {:?}", e))
                 })
-            },
-            Self::HTTPMethodEnum(method) => Ok(method.0.clone())
+            }
+            Self::HTTPMethodEnum(method) => Ok(method.0.clone()),
         }
     }
 }

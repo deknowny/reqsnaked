@@ -10,3 +10,11 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
+
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs==1.4.2",
+    "mkdocs-material==9.0.14",
+    "mike==1.1.2"
+]

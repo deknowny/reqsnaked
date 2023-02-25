@@ -10,6 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 bytes = "1.4.0"
+colored_json = "3.0.1"
 futures = "0.3.26"
 http = "0.2.9"
 pyo3 = { version = "0.16.3", features = ["extension-module"] }

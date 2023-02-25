@@ -28,7 +28,7 @@ async def main():
     )
     print(response.status)
     data = await response.json()
-    print(data.select())
+    print(data.query())
 
 
 asyncio.run(main())
@@ -50,5 +50,6 @@ The library is in developing stage and these features are coming soon.
 - [X] Cast `http` enums for request building
 - [ ] Proxy policy (random and cycled)
 - [ ] Rate limiter
+- [ ] Cookies
 - [X] Own exceptions
 - [ ] Pyi stubs

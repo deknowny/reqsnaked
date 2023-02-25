@@ -96,7 +96,7 @@ impl Request {
             },
             timeout: match timeout {
                 Some(inner) => Some(inner.to_native()?),
-                None => None
+                None => None,
             },
         })
     }

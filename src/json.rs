@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+use colored_json::prelude::*;
 use pyo3::exceptions::{PyIndexError, PyKeyError, PyTypeError};
 use pyo3::prelude::*;
 
@@ -53,10 +54,8 @@ pub enum PyIndex {
 #[pyclass]
 pub struct LazyJSON(pub PySerde);
 
-#[pymethods]
 impl LazyJSON {
-    #[args(keys = "*")]
-    pub fn select(&self, keys: Vec<PyIndex>) -> PyResult<PyObject> {
+    pub fn access_at<'rt>(&'rt self, keys: Vec<PyIndex>) -> PyResult<&'rt PySerde> {
         let mut current_value = &self.0;
         for field in keys {
             match current_value {
@@ -97,6 +96,26 @@ impl LazyJSON {
                 _ => return Err(PyTypeError::new_err("Accessible is not subscriptable")),
             };
         }
-        Ok(Python::with_gil(|py| current_value.to_object(py)))
+        Ok(current_value)
+    }
+}
+
+#[pymethods]
+impl LazyJSON {
+    #[args(keys = "*")]
+    pub fn query(&self, keys: Vec<PyIndex>) -> PyResult<PyObject> {
+        let mapping = self.access_at(keys)?;
+        Ok(Python::with_gil(|py| mapping.to_object(py)))
+    }
+
+    #[args(keys = "*")]
+    pub fn show(&self, keys: Vec<PyIndex>) -> PyResult<()> {
+        let mapping = self.access_at(keys)?;
+        let colored = serde_json::to_string(mapping)
+            .unwrap()
+            .to_colored_json_auto()
+            .unwrap();
+        println!("{}", colored);
+        Ok(())
     }
 }

@@ -32,6 +32,7 @@ pub struct AsyncResponse {
     pub response: std::cell::RefCell<Option<reqwest::Response>>,
     pub status: reqwest::StatusCode,
     pub version: reqwest::Version,
+    pub headers: reqwest::header::HeaderMap
 }
 
 #[pymethods]
@@ -48,8 +49,13 @@ impl AsyncResponse {
         rs2py::http_version::HTTPVersion::from(self.version)
     }
 
+    #[getter]
+    pub fn headers(&self) -> rs2py::header_map::HeaderMap {
+        rs2py::header_map::HeaderMap(self.headers.clone())
+    }
+
     pub fn json<'rt>(&self, py: Python<'rt>) -> PyResult<&'rt PyAny> {
-        match self.response.borrow_mut().take() {
+        match self.response.take() {
             Some(response) => pyo3_asyncio::tokio::future_into_py(py, async move {
                 match response.json::<PySerde>().await {
                     Ok(body) => Ok(LazyJSON(body)),
@@ -61,7 +67,12 @@ impl AsyncResponse {
     }
 
     pub fn read<'rt>(&'rt self, py: Python<'rt>) -> PyResult<&'rt pyo3::PyAny> {
-        match self.response.borrow_mut().take() {
+        match self
+            .response
+            .try_borrow_mut()
+            .map_err(|_| BorrowingError::new_err(RACE_CONDITION_ERROR_MSG))?
+            .take()
+        {
             Some(response) => pyo3_asyncio::tokio::future_into_py(py, async move {
                 match response.bytes().await {
                     Ok(body) => Ok(rs2py::bytes::Bytes(body)),
@@ -73,7 +84,12 @@ impl AsyncResponse {
     }
 
     pub fn to_stream(&self) -> PyResult<AsyncStream> {
-        match self.response.borrow_mut().take() {
+        match self
+            .response
+            .try_borrow_mut()
+            .map_err(|_| BorrowingError::new_err(RACE_CONDITION_ERROR_MSG))?
+            .take()
+        {
             Some(response) => Ok(AsyncStream {
                 response: std::sync::Arc::new(tokio::sync::Mutex::new(response)),
             }),

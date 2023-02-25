@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
 
 pub mod bytes;
+pub mod header_map;
 pub mod http_version;
 
 pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> PyResult<()> {

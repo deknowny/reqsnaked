@@ -1,0 +1,65 @@
+# Title of the site
+site_name: "Reqsnaked"
+
+# Description of the site
+site_description: Reqsnaked python library guide
+
+# URL for pages editing
+repo_url: https://github.com/deknowny/reqsnaked/tree/main/
+
+# Branch chosen when routing to repository
+remote_branch: main
+
+# Where md files are stored
+docs_dir: guide
+
+# Site's content
+nav:
+  - Home: index.md
+  - User Guide:
+    - Introduction: user-guide/index.md
+    - Understand the basics: user-guide/basics.md
+    - Headers: user-guide/headers.md
+    - Cookies: user-guide/cookies.md
+
+
+# Theme preference. Use `mkdocs-material`
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+  font:
+    text: Ubuntu
+    code: Monaco
+  features:
+    - header.autohide
+    - content.code.annotate
+
+
+extra_css:
+  - css/theme.css
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+# Material extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.magiclink
