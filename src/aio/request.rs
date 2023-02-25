@@ -94,15 +94,9 @@ impl Request {
                     ))
                 })
             },
-            timeout: {
-                if let Some(inner) = timeout {
-                    match inner.to_native() {
-                        Ok(value) => Some(value),
-                        Err(_) => None, // TODO
-                    }
-                } else {
-                    None
-                }
+            timeout: match timeout {
+                Some(inner) => Some(inner.to_native()?),
+                None => None
             },
         })
     }
