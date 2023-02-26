@@ -29,7 +29,7 @@ jobs:
       run: python -m venv .venv
 
     - name: Run tests
-      run: .venv\bin\maturin develop --release -E tests && .venv\bin\python -m pytest
+      run: .venv/bin/maturin develop --release -E tests && .venv/bin/python -m pytest
 
     - name: Upload wheels
       uses: actions/upload-artifact@v2
