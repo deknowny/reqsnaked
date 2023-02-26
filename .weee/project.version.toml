@@ -1,0 +1,49 @@
+[parts.major]
+value = 0
+factory.name = "increment"
+
+[parts.minor]
+value = 1
+factory.name = "increment"
+
+[parts.patch]
+value = 0
+factory.name = "increment"
+
+[parts.stage]
+value = "beta"
+factory.name = "loop"
+factory.payload = ["alpha", "beta", "stable"]
+
+[parts.step]
+value = 0
+factory.name = "increment"
+
+[[files."Cargo.toml"]]
+version.view = "{{ major }}.{{ minor }}.{{ patch }}{% if stage != \"stable\" %}-{{ stage }}{{ step }}{% endif %}"
+version.placement = "version = \"{version}\""
+
+
+[[files."pyproject.toml"]]
+version.view = "{{ major }}.{{ minor }}.{{ patch }}{% if stage != \"stable\" %}-{{ stage }}{{ step }}{% endif %}"
+version.placement = "version = \"{version}\""
+enable_liquid_tempaltes = true
+
+[hooks.afterwords]
+"Run tests" = ["pytest"]
+"Add files for commit" = ["git", "add", "--all"]
+"Commit bumping" = [
+    "git",
+    "commit",
+    "-m",
+    "!FORMAT:Bump version {old.major}.{old.minor}.{old.patch}-{old.stage}{old.step} => {new.major}.{new.minor}.{new.patch}-{new.stage}{new.step}",
+    "--no-verify"
+]
+"Add tag to commit" = [
+    "git",
+    "tag",
+    "-a",
+    "!FORMAT:v{new.major}.{new.minor}.{new.patch}-{old.stage}{old.step}",
+    "-m",
+    "!ASK:Enter release message"
+]

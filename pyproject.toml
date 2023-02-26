@@ -4,6 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "reqsnaked"
+version = "0.1.0-beta0"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Rust",

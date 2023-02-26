@@ -21,4 +21,4 @@ jobs:
           git config --local user.name ci-bot
           git config --local user.email ci-bot@example.com
           git fetch origin gh-pages --depth=1
-          mike deploy --push --force --update-aliases 0.1 latest -b gh-pages
+          mike deploy 0.1-beta --push --force --update-aliases 0.1-beta dev -b gh-pages

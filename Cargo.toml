@@ -1,6 +1,6 @@
 [package]
 name = "reqsnaked"
-version = "0.1.0"
+version = "0.1.0-beta0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -20,3 +20,6 @@ serde = "1.0.152"
 serde_json = "1.0.93"
 tokio = "1.25.0"
 url = "2.3.1"
+
+[dev-dependencies]
+weee = { git = "https://github.com/deknowny/weee" }
