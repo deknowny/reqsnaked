@@ -3,13 +3,19 @@ import asyncio
 import reqsnaked
 
 async def main():
-    client = reqsnaked.Client()
-    request = reqsnaked.Request(
-        "GET", "https://httpbin.org/image/jpeg",
+    client = reqsnaked.Client(
+        user_agent="Reqsnaked",
+        headers={"X-Foo": "Bar"}
     )
+
+    request = reqsnaked.Request(
+        "POST", "https://httpbin.org/anything",
+        query={"foo": "bar"},
+        form={"foo": "bar"}
+    )
+
     response = await client.send(request)
-    stream = response.to_stream()
-    while chunk := await stream.gnaw():
-        print(chunk)
+    body = await response.json()
+    body.show()
 
 asyncio.run(main())

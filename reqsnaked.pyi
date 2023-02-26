@@ -45,10 +45,10 @@ class HeaderMap:
 
 @dataclasses.dataclass
 class LazyJSON:
-    def query(self, keys: typing.List[typing.Union[str, int]]) -> typing.Any:
+    def query(self, *keys: typing.Union[str, int]) -> typing.Any:
         pass
 
-    def show(self, keys: typing.List[typing.Union[str, int]]) -> None:
+    def show(self, *keys: typing.Union[str, int]) -> None:
         pass
 
 

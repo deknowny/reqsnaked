@@ -20,3 +20,8 @@ docs = [
     "pillow==9.4.0",
     "cairosvg==2.6.0"
 ]
+
+test = [
+    "pytest==7.2.1",
+    "pytest-asyncio==0.20.3"
+]

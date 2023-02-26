@@ -9,7 +9,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+      name: Checkout to repo
+
     - uses: actions/setup-python@v4
+      name: Install python
       with:
         python-version: '3.8'
 
@@ -24,6 +27,9 @@ jobs:
 
     - name: Build with maturin
       run: maturin build --release -o dist
+
+    - name: Run tests
+      run: maturin develop --release -E tests && python -m pytest
 
     - name: Upload wheels
       uses: actions/upload-artifact@v2
@@ -42,6 +48,10 @@ jobs:
       with:
         command: build
         args: --release -o dist --universal2
+
+    - name: Run tests
+      run: maturin develop --release -E tests && python -m pytest
+
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
