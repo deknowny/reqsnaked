@@ -27,13 +27,6 @@ div.doc-contents:not(.first) {
     margin-bottom: 80px;
 }
 
-
-/* Images shape */
-img {
-    border-radius: 25px;
-}
-
-
 @keyframes heart {
     0%,
     40%,
