@@ -7,7 +7,7 @@ Reqsnaked is a blazing fast async/await HTTP client for Python written on Rust u
 * Fully-typed even being written on Rust
 
 ***
-__Docs__: [https://deknowny.github.io/reqsnaked/latest/](https://deknowny.github.io/reqsnaked/latest/)
+__Docs__: [https://deknowny.github.io/reqsnaked/devel/](https://deknowny.github.io/reqsnaked/devel/)
 
 ## Overview
 ```python title="Example"
