@@ -6,12 +6,12 @@ use crate::rs2py;
 use pyo3::exceptions::PyRuntimeError;
 
 #[pyclass]
-pub struct AsyncStream {
+pub struct Stream {
     pub response: std::sync::Arc<tokio::sync::Mutex<reqwest::Response>>,
 }
 
 #[pymethods]
-impl AsyncStream {
+impl Stream {
     pub fn gnaw<'rt>(slf: PyRef<'rt, Self>, py: Python<'rt>) -> PyResult<&'rt pyo3::PyAny> {
         let response = slf.response.clone();
         pyo3_asyncio::tokio::future_into_py(py, async move {
@@ -83,14 +83,14 @@ impl AsyncResponse {
         }
     }
 
-    pub fn to_stream(&self) -> PyResult<AsyncStream> {
+    pub fn to_stream(&self) -> PyResult<Stream> {
         match self
             .response
             .try_borrow_mut()
             .map_err(|_| BorrowingError::new_err(RACE_CONDITION_ERROR_MSG))?
             .take()
         {
-            Some(response) => Ok(AsyncStream {
+            Some(response) => Ok(Stream {
                 response: std::sync::Arc::new(tokio::sync::Mutex::new(response)),
             }),
             None => Err(PyRuntimeError::new_err(
@@ -104,8 +104,8 @@ pub fn init_module(py: Python, parent_module: &PyModule, library: &PyModule) -> 
     let submod = PyModule::new(py, "response")?;
     submod.add_class::<AsyncResponse>()?;
     library.add_class::<AsyncResponse>()?;
-    submod.add_class::<AsyncStream>()?;
-    library.add_class::<AsyncStream>()?;
+    submod.add_class::<Stream>()?;
+    library.add_class::<Stream>()?;
     parent_module.add_submodule(submod)?;
     Ok(())
 }
