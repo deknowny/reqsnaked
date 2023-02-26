@@ -25,11 +25,11 @@ jobs:
     - name: Install maturin
       run: python -m pip install maturin
 
-    - name: Build with maturin
-      run: maturin build --release -o dist
+    - name: Setup venv
+      run: python -m venv .venv
 
     - name: Run tests
-      run: maturin develop --release -E tests && python -m pytest
+      run: .venv\bin\maturin develop --release -E tests && .venv\bin\python -m pytest
 
     - name: Upload wheels
       uses: actions/upload-artifact@v2
@@ -49,8 +49,11 @@ jobs:
         command: build
         args: --release -o dist --universal2
 
+    - name: Setup venv
+      run: python -m venv .venv
+
     - name: Run tests
-      run: maturin develop --release -E tests && python -m pytest
+      run: .venv/bin/maturin develop --release -E tests && .venv/bin/python -m pytest
 
     - name: Upload wheels
       uses: actions/upload-artifact@v2
