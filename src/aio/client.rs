@@ -36,8 +36,10 @@ impl Client {
         headers: Option<std::collections::HashMap<String, String>>,
         store_cookie: Option<bool>,
         max_allowed_redirects: Option<usize>,
+        danger_accept_invalid_certs: Option<bool>
     ) -> PyResult<Self> {
         let mut client = reqwest::Client::builder();
+        client = client.use_rustls_tls();
         if let Some(ref user_agent) = user_agent {
             client = client.user_agent(user_agent);
         }
@@ -57,6 +59,9 @@ impl Client {
         }
         if let Some(max_allowed_redirects) = max_allowed_redirects {
             client = client.redirect(reqwest::redirect::Policy::limited(max_allowed_redirects))
+        }
+        if let Some(danger_accept_invalid_certs) = danger_accept_invalid_certs {
+            client = client.danger_accept_invalid_certs(danger_accept_invalid_certs);
         }
 
         match client.build() {
