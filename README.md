@@ -44,9 +44,33 @@ async def main():
 
 asyncio.run(main())
 ```
-```
+```json
 HTTPStatus.OK
-{'url': 'https://httpbin.org/anything', 'method': 'POST', 'json': None, 'files': {'foo': '01010101'}, 'headers': {'Content-Type': 'multipart/form-data; boundary=1d0854194a7a7096-e4818bfc797d4d8f-71250e8530573ad3-9f55410350495f98', 'Accept-Encoding': 'gzip, br', 'Host': 'httpbin.org', 'X-Amzn-Trace-Id': 'Root=1-63f93eb3-70555b2139c89c5a29a49d37', 'Accept': '*/*', 'User-Agent': 'Reqsnaked/1.0', 'X-Foo': 'bar', 'Content-Length': '246', 'X-Bar': 'foo'}, 'origin': '185.97.201.3', 'form': {}, 'data': '', 'args': {}}
+{
+  "args": {
+    "foo": "bar"
+  },
+  "data": "",
+  "files": {
+    "foo": "01010101"
+  },
+  "form": {},
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, br",
+    "Content-Length": "246",
+    "Content-Type": "multipart/form-data; boundary=a59212f1bfcc112f-b3b83c8afd39b140-f302f74df067620a-a8a38a37c3355abe",
+    "Host": "httpbin.org",
+    "User-Agent": "Reqsnaked/1.0",
+    "X-Amzn-Trace-Id": "Root=1-63fcfd9b-412668b5117367524668f43b",
+    "X-Bar": "foo",
+    "X-Foo": "bar"
+  },
+  "json": null,
+  "method": "POST",
+  "origin": "91.223.70.172",
+  "url": "https://httpbin.org/anything?foo=bar"
+}
 ```
 
 ## Installlation
