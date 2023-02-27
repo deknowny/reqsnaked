@@ -6,4 +6,4 @@ client = reqsnaked.Client(store_cookie=True)
 ```
 
 !!! Todo
-    Cookies wrapper is not implement in beter way now, it comes later. Now you should pass cookies by string into cookie header and read it using some kind of `http.cookiejar`
+    Cookies wrapper is not implement in a better way now, it comes later. Now you should pass cookies by string into `Cookie` header and read it using some kind of `http.cookiejar`
