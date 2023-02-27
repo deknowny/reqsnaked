@@ -36,3 +36,7 @@ Legend:
 ```
 ***
 In results, reqsnaked ~15% faster
+
+## TODO
+* `httpx`
+* small, medium and large jsons in requests
