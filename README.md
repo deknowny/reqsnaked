@@ -54,19 +54,3 @@ Currently the library is not published to PyPI, so the only way to install it is
 ```bash
 python -m pip install -U https://github.com/deknowny/reqsnaked/archive/main.zip
 ```
-
-
-## Features list
-The library is in developing stage and these features are coming soon.
-- [X] Redirect policies in client
-- [X] Form requests
-- [X] Multipart requests
-- [X] Raw body reader
-- [X] Chunks body reader
-- [X] Cast `urllib.parse.ParseResult` for request building
-- [X] Cast `http` enums for request building
-- [ ] Proxy policy (random and cycled)
-- [ ] Rate limiter
-- [ ] Cookies
-- [X] Own exceptions
-- [ ] Pyi stubs
