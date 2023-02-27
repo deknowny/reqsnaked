@@ -106,6 +106,7 @@ class Client:
     headers: typing.Optional[typing.Dict[str, str]] = None
     store_cookie: typing.Optional[bool] = False
     max_allowed_redirects: typing.Optional[int] = 10
+    danger_accept_invalid_certs: typing.Optional[bool] = False
 
     async def send(self, requset) -> Response:
         pass
