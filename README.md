@@ -44,8 +44,10 @@ async def main():
 
 asyncio.run(main())
 ```
-```json
+```
 HTTPStatus.OK
+```
+```json
 {
   "args": {
     "foo": "bar"
