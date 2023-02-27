@@ -56,13 +56,13 @@ class LazyJSON:
 class Part:
     name: str
     value: typing.Union[str, bytes]
-    filename: str
-    mime: str
+    filename: typing.Optional[str] = None
+    mime: typing.Optional[str] = None
 
 
-@dataclasses.dataclass
 class Multipart:
-    parts: typing.List[Part]
+    def __init__(self, *parts: Part) -> None:
+        pass
 
     def boundary(self) -> str:
         pass
