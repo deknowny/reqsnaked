@@ -28,6 +28,9 @@ jobs:
     - name: Run tests
       run:  python -m venv .venv && .venv\Scripts\python.exe -m pip install .[test] && .venv\Scripts\python.exe -m pytest
 
+    - name: Build with maturin
+      run: maturin build --release -o dist
+
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
