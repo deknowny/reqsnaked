@@ -26,3 +26,9 @@ test = [
     "pytest==7.2.1",
     "pytest-asyncio==0.20.3"
 ]
+
+benchmark = [
+    "aiohttp==3.8.4",
+    "httpx==0.23.3",
+    "pytest-benchmark==4.0.0"
+]
