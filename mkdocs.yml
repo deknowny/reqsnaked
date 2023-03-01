@@ -11,7 +11,7 @@ site_author: Deknowny
 # Site's content
 nav:
   - Home: index.md
-  - User Guide:
+  - User guide:
     - Introduction: user-guide/index.md
     - Understand the basics: user-guide/basics.md
     - Headers: user-guide/headers.md
