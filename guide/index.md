@@ -1,3 +1,8 @@
+---
+hide:
+  - feedback
+---
+
 # Overview
 :material-lightning-bolt: Reqsnaked is a blazing fast async/await HTTP client for Python written on Rust using reqwests.
 
