@@ -1,7 +1,7 @@
 # Reqsnaked
 Reqsnaked is a blazing fast async/await HTTP client for Python written on Rust using reqwests.
 
-* [Works 15% faster than `aiohttp` at average](./benchmarks)
+* [Works 15% faster than `aiohttp` on average](./benchmarks)
 * RAII approach without context managers
 * Memory-efficient lazy JSON parser
 * Fully-typed even being written on Rust
