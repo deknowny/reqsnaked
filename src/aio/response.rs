@@ -5,7 +5,7 @@ use crate::json::{LazyJSON, PySerde};
 use crate::rs2py;
 use pyo3::exceptions::PyRuntimeError;
 
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct Stream {
     pub response: std::sync::Arc<tokio::sync::Mutex<reqwest::Response>>,
 }
@@ -27,7 +27,7 @@ impl Stream {
     }
 }
 
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct AsyncResponse {
     pub response: std::cell::RefCell<Option<reqwest::Response>>,
     pub status: reqwest::StatusCode,

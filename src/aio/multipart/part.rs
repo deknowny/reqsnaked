@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 use crate::exceptions::MIMEParseError;
 
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct Part {
     pub name: String,
     pub inner: std::cell::RefCell<Option<reqwest::multipart::Part>>,

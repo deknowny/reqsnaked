@@ -4,7 +4,7 @@ use crate::aio::request::Request;
 use crate::aio::response::AsyncResponse;
 use crate::exceptions::wrap_reqwest_error;
 
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct Client {
     client: reqwest::Client,
 }

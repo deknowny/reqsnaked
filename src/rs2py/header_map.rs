@@ -4,7 +4,7 @@ use pyo3::{
 };
 
 #[derive(Clone)]
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct HeaderMap(pub reqwest::header::HeaderMap);
 
 #[pymethods]

@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 use crate::exceptions::{BorrowingError, RACE_CONDITION_ERROR_MSG};
 
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct Multipart(pub std::cell::RefCell<Option<reqwest::multipart::Form>>);
 
 #[pymethods]

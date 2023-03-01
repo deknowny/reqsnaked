@@ -11,7 +11,7 @@ use crate::{
     }, json::PySerde,
 };
 
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct Request {
     pub method: py2rs::http_method::HTTPMethod,
     pub url: py2rs::url::URL,

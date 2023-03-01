@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 #[allow(non_camel_case_types)]
 #[derive(Clone)]
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub enum HTTPVersion {
     HTTP_09,
     HTTP_10,

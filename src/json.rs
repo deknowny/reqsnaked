@@ -51,7 +51,7 @@ pub enum PyIndex {
 }
 
 #[derive(Clone)]
-#[pyclass]
+#[pyclass(module = "reqsnaked")]
 pub struct LazyJSON(pub PySerde);
 
 impl LazyJSON {
