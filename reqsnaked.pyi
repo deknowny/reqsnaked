@@ -110,3 +110,48 @@ class Client:
 
     async def send(self, requset) -> Response:
         pass
+
+
+class BorrowingError(RuntimeError):
+    pass
+
+
+class BaseReqwestError(Exception):
+    pass
+
+class BodyError(BaseReqwestError):
+    pass
+
+class BuilderError(BaseReqwestError):
+    pass
+
+class ConnectionError(BaseReqwestError):
+    pass
+
+class DecodingError(BaseReqwestError):
+    pass
+
+class RedirectError(BaseReqwestError):
+    pass
+
+class TimeoutError(BaseReqwestError):
+    pass
+
+class StatusError(BaseReqwestError):
+    pass
+
+class RequestError(BaseReqwestError):
+    pass
+
+class UnknownError(BaseReqwestError):
+    pass
+
+
+class HTTPMethodParseError(Exception):
+    pass
+
+class URLParseError(Exception):
+    pass
+
+class MIMEParseError(Exception):
+    pass
