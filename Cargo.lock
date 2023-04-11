@@ -123,6 +123,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "chardet"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a48563284b67c003ba0fb7243c87fab68885e1532c605704228a80238512e31"
+
+[[package]]
 name = "colored_json"
 version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -989,7 +995,9 @@ name = "reqsnaked"
 version = "0.1.0-beta0"
 dependencies = [
  "bytes",
+ "chardet",
  "colored_json",
+ "encoding_rs",
  "futures",
  "http",
  "pyo3",
