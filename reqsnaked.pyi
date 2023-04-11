@@ -17,6 +17,9 @@ class Bytes:
     def as_bytes(self) -> bytes:
         pass
 
+    def decode(self) -> str:
+        pass
+
 
 class Stream:
     async def gnaw(self) -> typing.Optional[Bytes]:
