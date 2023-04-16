@@ -14,7 +14,7 @@ QueryValue = typing.Union[
 
 
 class Bytes:
-    def to_bytes(self) -> bytes:
+    def as_bytes(self) -> bytes:
         pass
 
 
